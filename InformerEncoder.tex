@@ -1,0 +1,586 @@
+
+\documentclass[border=16pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+
+%\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+ %\def\SoftmaxColor{rgb:magenta,5;black,7}   %深紫
+ %定义颜色
+\def\dataupcolor{rgb:blue,5}
+\def\UnpoolColor{rgb:blue,2;green,1;black,0.3} %紫色
+\def\FcReluColor{rgb:blue,5;red,5;white,4} %淡紫色
+\def\dataupcolor{green!40!white}
+\def\datadowncolor{green!20!white}
+\def\EmbeddingdataColor{rgb:blue,5;red,2.5;white,5}
+\def\ConvColor{rgb:blue,5;red,2.5;white,5} %\def\FcColor{rgb:blue,5;red,2.5;white,5} 
+\def\CovdataColor{black!80!white}
+\def\NheadBox{yellow!20!white}
+\def\NheadColora{rgb:yellow,5;red,5;white,5}  %\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\NheadColorb{rgb:red,0.5;black,0.3}
+\def\SumColor{rgb:blue,5;green,15}
+%定义字体大小
+\def\fsizea{15}
+\def\fsizeb{12}
+\def\fsizetext{18}
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+	\begin{tikzpicture}
+	\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+	\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+	\pgfmathsetmacro{\cubex}{0.6}
+	\pgfmathsetmacro{\cubey}{2.5}
+	\pgfmathsetmacro{\cubez}{0.6}
+	%画输入数据的， 第一层
+	\draw[fill=\datadowncolor] (\cubex,\cubey,\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle; % cycle 用来填充缺口 
+	\draw[fill=\datadowncolor] (\cubex,\cubey,\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,2*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,2*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,3*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,3*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,4*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,4*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,5*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,5*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,6*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,6*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,7*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,7*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,8*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,8*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,9*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,9*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,10*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,10*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,11*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,11*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,12*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,12*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,13*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,13*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,14*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,14*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,15*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,15*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,16*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,16*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,17*\cubez) -- ++(-\cubex,0,0) -- ++(0,-\cubey,0) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,17*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\datadowncolor] (\cubex,\cubey,17*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	
+	%画输入数据的， 第二层
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,2*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,2*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,3*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,3*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,4*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,4*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,5*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,5*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,6*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,6*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,7*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,7*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,8*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,8*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,9*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,9*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,10*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,10*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,11*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,11*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,12*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,12*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,13*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,13*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,14*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,14*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,15*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,15*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,16*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,16*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,17*\cubez) -- ++(-\cubex,0,0) -- ++(0,-\cubey,0) -- ++(\cubex,0,0) -- cycle;
+	\draw[fill=\dataupcolor] (\cubex,2*\cubey,17*\cubez) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[fill=\dataupcolor ] (\cubex,2*\cubey,17*\cubez) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+	
+	\pic[shift={(0,0,0)} ] at (3,0,0) 
+	{Box={
+			name=scalarEmbedding,
+			caption=Cov1d,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L,
+			fill=\EmbeddingdataColor,
+			height=4,
+			width=2,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0,0,12)}] at (scalarEmbedding-south) 
+	{Box={
+			name=whitescalarhalf,
+			caption=,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/2,
+			fill=white,
+			height=4,
+			width=2,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+
+	\pic[shift={(0,0.46,6.5)}] at (whitescalarhalf-southwest) 
+	{Box={
+			name=scalarhalf,
+			caption=Cov1d,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/2,
+			fill=\EmbeddingdataColor,
+			height=4,
+			width=2,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+
+	\pic[shift={(4,0,10)}] at (scalarEmbedding-southeast) 
+	{Box={
+			name=stampEmbeding,
+			caption=Embedding,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L,
+			fill=\CovdataColor,
+			height=4,
+			width=2,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+
+	\pic[shift={(0,0,12)}] at (stampEmbeding-south) 
+	{Box={
+			name=whitestamphalf,
+			caption=,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/2,
+			fill=white,
+			height=4,
+			width=2,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	\pic[shift={(0,0.46,6.5)}] at (whitestamphalf-southwest) 
+	{Box={
+			name=stamphalf,
+			caption=Embedding,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/2,
+			fill=\CovdataColor,
+			height=4,
+			width=2,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(2.5,0,0)}] at (scalarEmbedding-east) 
+	{Ball={
+			name=add1,
+			fill=\SumColor,
+			opacity=0.6,
+			radius=2.5,
+			logo=$+$,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (scalarEmbedding-east)    -- node {\midarrow} (add1-west);
+	
+	\path (stampEmbeding-west) -- (stampEmbeding-east) coordinate[pos=6] (stampEmbeding-mid) ;
+	\draw [copyconnection]  (stampEmbeding-east)  
+	-- node {\copymidarrow}(stampEmbeding-mid)
+	-- node {\copymidarrow} (add1-south);
+	
+	\pic[shift={(2.5,0,0)}] at (scalarhalf-east) 
+	{Ball={
+			name=add2,
+			fill=\SumColor,
+			opacity=0.6,
+			radius=2.5,
+			logo=$+$,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (scalarhalf-east)    -- node {\midarrow} (add2-west); %实线箭头连接
+	
+	\path (stamphalf-west) -- (stamphalf-east) coordinate[pos=6] (stamphalf-mid); %先定义箭头方向改变的位置 
+	\draw [copyconnection]  (stamphalf-east)   %画带折现的箭头连接
+	-- node {\copymidarrow}(stamphalf-mid)
+	-- node {\copymidarrow} (add2-south);
+	
+	\pic[shift={(5,0,0)}] at (add1-east) 
+	{Box={
+			name=Multihead_Box1,
+			caption=Attention Block 1,
+			xlabel={{"n-heaads", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadBox,
+			height=72,
+			width=\fsizea,
+			depth=72,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (add1-east)    -- node {\midarrow} (Multihead_Box1-west);
+	
+	\pic[shift={(5.6,0,0)}] at (add1-east) 
+	{Box={
+			name=head11,
+			caption= ,
+			xlabel={{, }},
+			ylabel=L,
+			zlabel=,
+			fill=\NheadColora,
+			height=64,
+			width=1,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont,
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head11-east) 
+	{Box={
+			name=head12,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColora,
+			height=64,
+			width=1,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head12-east) 
+	{Box={
+			name=head13,
+			caption= ,
+			xlabel={{"k", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColorb,
+			height=64,
+			width=1,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head13-east) 
+	{Box={
+			name=head\fsizea,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=L,
+			fill=\NheadColorb,
+			height=64,
+			width=1,
+			depth=64,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(3,0,0)}] at (head\fsizea-east) 
+	{Box={
+			name=conv11,
+			caption= ,
+			xlabel={{"Cov1d", }},
+			ylabel=,
+			zlabel=,
+			fill=\ConvColor,
+			height=4,
+			width=2,
+			depth=36,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (head\fsizea-east)    -- node {\midarrow} (conv11-west);
+	
+	\pic[shift={ (0.2,0,0) }] at (conv11-east) 
+	{Box={
+			name=pool11,
+			caption=MaxPool1d,
+			fill=\dataupcolor,
+			opacity=0.5,
+			height=4,
+			width=1,
+			depth=36,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(3,0,0)}] at (pool11-east) 
+	{Box={
+			name=MultiheadBox2,
+			caption=Attention Block 2,
+			xlabel={{"n-heaads", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadBox,
+			height=36,
+			width=\fsizea,
+			depth=36,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont,
+		}
+	};
+	
+	\draw [connection]  (pool11-east)    -- node {\midarrow} (MultiheadBox2-west);
+	
+	\pic[shift={(3.6,0,0)}] at (pool11-east) 
+	{Box={
+			name=head21,
+			caption= ,
+			xlabel={{, }},
+			ylabel=L/2,
+			zlabel=,
+			fill=\NheadColora,
+			height=32,
+			width=1,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont,
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head21-east) 
+	{Box={
+			name=head22,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColora,
+			height=32,
+			width=1,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head22-east) 
+	{Box={
+			name=head23,
+			caption= ,
+			xlabel={{"k", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColorb,
+			height=32,
+			width=1,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head23-east) 
+	{Box={
+			name=head24,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=L/2,
+			fill=\NheadColorb,
+			height=32,
+			width=1,
+			depth=32,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(3,0,0)}] at (head23-east) 
+	{Box={
+			name=conv21,
+			caption= ,
+			xlabel={{"Cov1d", }},
+			ylabel=,
+			zlabel=,
+			fill=\ConvColor,
+			height=4,
+			width=2,
+			depth=18,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (head24-east)    -- node {\midarrow} (conv21-west);
+	
+	\pic[shift={ (0.2,0,0) }] at (conv21-east) 
+	{Box={
+			name=pool21,
+			caption=MaxPool1d,
+			fill=\dataupcolor,
+			opacity=0.5,
+			height=4,
+			width=1,
+			depth=18,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(2.5,0,0)}] at (pool21-east) 
+	{Box={
+			name=MultiheadBox3,
+			caption=Attention Block 3,
+			xlabel={{"n-heaads", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadBox,
+			height=18,
+			width=\fsizea,
+			depth=18,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\draw [connection]  (pool21-east)    -- node {\midarrow} (MultiheadBox3-west);
+	
+	\pic[shift={(3.1,0,0)}] at (pool21-east) 
+	{Box={
+			name=head31,
+			caption= ,
+			xlabel={{, }},
+			ylabel=L/4,
+			zlabel=,
+			fill=\NheadColora,
+			height=15,
+			width=1,
+			depth=15,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head31-east) 
+	{Box={
+			name=head32,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColora,
+			height=15,
+			width=1,
+			depth=15,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head32-east) 
+	{Box={
+			name=head33,
+			caption= ,
+			xlabel={{"k", }},
+			ylabel=,
+			zlabel=,
+			fill=\NheadColorb,
+			height=15,
+			width=1,
+			depth=15,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0.15,0,0)}] at (head33-east) 
+	{Box={
+			name=head34,
+			caption= ,
+			xlabel={{, }},
+			ylabel=,
+			zlabel=L/4,
+			fill=\NheadColorb,
+			height=15,
+			width=1,
+			depth=15,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(3,0,0)}] at (head33-east) 
+	{Box={
+			name=conv31,
+			caption=Feature Map,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/4,
+			fill=\UnpoolColor,
+			height=4,
+			width=2,
+			depth=8,
+			font=\fontsize{\fsizea}{\fsizeb}\selectfont
+		}
+	};
+	
+	\pic[shift={(0,0,18.5)}] at (conv31-south) 
+	{Box={
+			name=conv32,
+			caption=Feature Map,
+			xlabel={{, }},
+			ylabel=d,
+			zlabel=L/4,
+			fill=\UnpoolColor,
+			height=4,
+			width=2,
+			depth=8,
+			font=\fontsize{\fsizea}{\fsizea}\selectfont
+		}
+	};
+	
+	\draw [connection]  (head34-east)    -- node {\midarrow} (conv31-west);
+	
+	\path (add2-west) -- (add2-east) coordinate[pos=25] (add2-mid);
+	\draw [dash pattern=on 2pt off 3pt, dash phase=3pt]  (add2-east) %虚线的连接
+	-- node[fill=white!50, font=\fontsize{\fsizetext}{\fsizeb}\selectfont] {Similar Operation} (add2-mid) 
+	-- node {\midarrow} (conv32-west);
+	
+	
+\draw[densely dashed] %定义虚线框
+%\cubex,\cubey,\cubez
+(\cubex,2*\cubey,17*\cubez) -- (scalarEmbedding-nearnorthwest)
+(\cubex,\cubey,17*\cubez) -- (scalarEmbedding-nearsouthwest)
+(\cubex,2*\cubey,0)  -- (scalarEmbedding-farnorthwest)
+(\cubex,\cubey,0)  -- (scalarEmbedding-farsouthwest)
+
+(\cubex,\cubey,17*\cubez) -- (stampEmbeding-nearnorthwest)
+(\cubex,0,17*\cubez) -- (stampEmbeding-nearsouthwest)
+(\cubex,\cubey,0)  -- (stampEmbeding-farnorthwest)
+(\cubex, 0,0)  -- (stampEmbeding-farsouthwest)
+;	
+%在指定位置, 添加文字和公式
+\draw (\cubex,2*\cubey+1.5,0) node[anchor=north east,inner sep = 10, xshift=15,scale=2]
+{
+	$T=t$
+};
+\draw (\cubex,2*\cubey+2,17*\cubez+2) node[anchor=north east,inner sep = 10, xshift=25,scale=2]
+{
+	$T=t+D_x$
+};
+	\end{tikzpicture}
+\end{document}
